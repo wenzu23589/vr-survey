@@ -4,20 +4,89 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Teachers' Perceptions of Virtual Reality in Maltese Language Teaching</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/survey-jquery/1.12.28/defaultV2.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/survey-jquery/1.12.28/survey.jquery.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/survey-core@1.12.28/defaultV2.min.css" />
+  <script src="https://unpkg.com/survey-core@1.12.28/survey.core.min.js"></script>
+  <script src="https://unpkg.com/survey-js-ui@1.12.28/survey-js-ui.min.js"></script>
   <style>
-    body { margin: 0; padding: 0; background: #f4f4f4; font-family: Arial, sans-serif; }
-    #surveyContainer { max-width: 900px; margin: 0 auto; padding: 20px; }
+    body { margin: 0; padding: 0; background: #f3f3f3; }
   </style>
 </head>
 <body>
-<div id="surveyContainer">
-  <div id="surveyElement"></div>
-</div>
+<div id="surveyElement"></div>
 
 <script>
+var themeJSON = {
+  "themeName": "default",
+  "colorPalette": "light",
+  "isPanelless": false,
+  "backgroundImage": "",
+  "backgroundImageFit": "cover",
+  "backgroundImageAttachment": "scroll",
+  "backgroundOpacity": 1,
+  "cssVariables": {
+    "--sjs-font-family": "Open Sans",
+    "--sjs-font-size": "16px",
+    "--sjs-corner-radius": "4px",
+    "--sjs-base-unit": "8px",
+    "--sjs-shadow-small": "0px 1px 2px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-shadow-inner": "inset 0px 1px 2px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-border-default": "rgba(0, 0, 0, 0.16)",
+    "--sjs-border-light": "rgba(0, 0, 0, 0.09)",
+    "--sjs-general-backcolor": "rgba(255, 255, 255, 1)",
+    "--sjs-general-backcolor-dark": "rgba(248, 248, 248, 1)",
+    "--sjs-general-backcolor-dim-light": "rgba(249, 249, 249, 1)",
+    "--sjs-general-backcolor-dim-dark": "rgba(243, 243, 243, 1)",
+    "--sjs-general-forecolor": "rgba(0, 0, 0, 0.91)",
+    "--sjs-general-forecolor-light": "rgba(0, 0, 0, 0.45)",
+    "--sjs-general-dim-forecolor": "rgba(0, 0, 0, 0.91)",
+    "--sjs-general-dim-forecolor-light": "rgba(0, 0, 0, 0.45)",
+    "--sjs-secondary-backcolor": "rgba(255, 152, 20, 1)",
+    "--sjs-secondary-backcolor-light": "rgba(255, 152, 20, 0.1)",
+    "--sjs-secondary-backcolor-semi-light": "rgba(255, 152, 20, 0.25)",
+    "--sjs-secondary-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-secondary-forecolor-light": "rgba(255, 255, 255, 0.25)",
+    "--sjs-shadow-small-reset": "0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-shadow-medium": "0px 2px 6px 0px rgba(0, 0, 0, 0.1)",
+    "--sjs-shadow-large": "0px 8px 16px 0px rgba(0, 0, 0, 0.1)",
+    "--sjs-shadow-inner-reset": "inset 0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-border-inside": "rgba(0, 0, 0, 0.16)",
+    "--sjs-special-red-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-special-green": "rgba(25, 179, 148, 1)",
+    "--sjs-special-green-light": "rgba(25, 179, 148, 0.1)",
+    "--sjs-special-green-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-special-blue": "rgba(67, 127, 217, 1)",
+    "--sjs-special-blue-light": "rgba(67, 127, 217, 0.1)",
+    "--sjs-special-blue-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-special-yellow": "rgba(255, 152, 20, 1)",
+    "--sjs-special-yellow-light": "rgba(255, 152, 20, 0.1)",
+    "--sjs-special-yellow-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-general-backcolor-dim": "rgba(243, 243, 243, 1)",
+    "--sjs-primary-backcolor": "rgba(25, 179, 148, 1)",
+    "--sjs-primary-backcolor-dark": "rgba(20, 164, 139, 1)",
+    "--sjs-primary-backcolor-light": "rgba(25, 179, 148, 0.1)",
+    "--sjs-primary-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-primary-forecolor-light": "rgba(255, 255, 255, 0.25)",
+    "--sjs-special-red": "rgba(229, 10, 62, 1)",
+    "--sjs-special-red-light": "rgba(229, 10, 62, 0.1)"
+  },
+  "header": {
+    "height": 0,
+    "mobileHeight": 0,
+    "inheritWidthFrom": "survey",
+    "textAreaWidth": 0,
+    "backgroundImageFit": "cover",
+    "backgroundImageOpacity": 100,
+    "overlapEnabled": false,
+    "logoPositionX": "left",
+    "logoPositionY": "top",
+    "titlePositionX": "left",
+    "titlePositionY": "bottom",
+    "descriptionPositionX": "left",
+    "descriptionPositionY": "bottom"
+  },
+  "headerView": "advanced"
+};
+
 var surveyJSON = {
   "title": "Teachers' Perceptions of Virtual Reality in Maltese Language Teaching",
   "completedHtml": "<h3>Thank you for taking the time to complete the questionnaire.</h3><p>Your response has been recorded.</p>",
@@ -278,102 +347,23 @@ var surveyJSON = {
   "firstPageIsStartPage": true
 };
 
-// Theme from SurveyJS Creator
-var themeJSON = {
-  "themeName": "default",
-  "colorPalette": "light",
-  "isPanelless": false,
-  "backgroundImage": "",
-  "backgroundImageFit": "cover",
-  "backgroundImageAttachment": "scroll",
-  "backgroundOpacity": 1,
-  "cssVariables": {
-    "--sjs-font-family": "Open Sans",
-    "--sjs-font-size": "16px",
-    "--sjs-corner-radius": "4px",
-    "--sjs-base-unit": "8px",
-    "--sjs-shadow-small": "0px 1px 2px 0px rgba(0, 0, 0, 0.15)",
-    "--sjs-shadow-inner": "inset 0px 1px 2px 0px rgba(0, 0, 0, 0.15)",
-    "--sjs-border-default": "rgba(0, 0, 0, 0.16)",
-    "--sjs-border-light": "rgba(0, 0, 0, 0.09)",
-    "--sjs-general-backcolor": "rgba(255, 255, 255, 1)",
-    "--sjs-general-backcolor-dark": "rgba(248, 248, 248, 1)",
-    "--sjs-general-backcolor-dim-light": "rgba(249, 249, 249, 1)",
-    "--sjs-general-backcolor-dim-dark": "rgba(243, 243, 243, 1)",
-    "--sjs-general-forecolor": "rgba(0, 0, 0, 0.91)",
-    "--sjs-general-forecolor-light": "rgba(0, 0, 0, 0.45)",
-    "--sjs-general-dim-forecolor": "rgba(0, 0, 0, 0.91)",
-    "--sjs-general-dim-forecolor-light": "rgba(0, 0, 0, 0.45)",
-    "--sjs-secondary-backcolor": "rgba(255, 152, 20, 1)",
-    "--sjs-secondary-backcolor-light": "rgba(255, 152, 20, 0.1)",
-    "--sjs-secondary-backcolor-semi-light": "rgba(255, 152, 20, 0.25)",
-    "--sjs-secondary-forecolor": "rgba(255, 255, 255, 1)",
-    "--sjs-secondary-forecolor-light": "rgba(255, 255, 255, 0.25)",
-    "--sjs-shadow-small-reset": "0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
-    "--sjs-shadow-medium": "0px 2px 6px 0px rgba(0, 0, 0, 0.1)",
-    "--sjs-shadow-large": "0px 8px 16px 0px rgba(0, 0, 0, 0.1)",
-    "--sjs-shadow-inner-reset": "inset 0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
-    "--sjs-border-inside": "rgba(0, 0, 0, 0.16)",
-    "--sjs-special-red-forecolor": "rgba(255, 255, 255, 1)",
-    "--sjs-special-green": "rgba(25, 179, 148, 1)",
-    "--sjs-special-green-light": "rgba(25, 179, 148, 0.1)",
-    "--sjs-special-green-forecolor": "rgba(255, 255, 255, 1)",
-    "--sjs-special-blue": "rgba(67, 127, 217, 1)",
-    "--sjs-special-blue-light": "rgba(67, 127, 217, 0.1)",
-    "--sjs-special-blue-forecolor": "rgba(255, 255, 255, 1)",
-    "--sjs-special-yellow": "rgba(255, 152, 20, 1)",
-    "--sjs-special-yellow-light": "rgba(255, 152, 20, 0.1)",
-    "--sjs-special-yellow-forecolor": "rgba(255, 255, 255, 1)",
-    "--sjs-general-backcolor-dim": "rgba(243, 243, 243, 1)",
-    "--sjs-primary-backcolor": "rgba(25, 179, 148, 1)",
-    "--sjs-primary-backcolor-dark": "rgba(20, 164, 139, 1)",
-    "--sjs-primary-backcolor-light": "rgba(25, 179, 148, 0.1)",
-    "--sjs-primary-forecolor": "rgba(255, 255, 255, 1)",
-    "--sjs-primary-forecolor-light": "rgba(255, 255, 255, 0.25)",
-    "--sjs-special-red": "rgba(229, 10, 62, 1)",
-    "--sjs-special-red-light": "rgba(229, 10, 62, 0.1)"
-  },
-  "header": {
-    "height": 0,
-    "mobileHeight": 0,
-    "inheritWidthFrom": "survey",
-    "textAreaWidth": 0,
-    "backgroundImageFit": "cover",
-    "backgroundImageOpacity": 100,
-    "overlapEnabled": false,
-    "logoPositionX": "left",
-    "logoPositionY": "top",
-    "titlePositionX": "left",
-    "titlePositionY": "bottom",
-    "descriptionPositionX": "left",
-    "descriptionPositionY": "bottom"
-  },
-  "headerView": "advanced"
-};
-
-// Initialise the survey
-var survey = new Survey.Model(surveyJSON);
-
-// Apply the theme
-survey.applyTheme(themeJSON);
-
-// Send data to Google Sheets on completion
 var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytaudwFL-nqVM4yQtyam5sqqKbjGMwGq8nDBhwaXl8TxzCwRTukBouozkHoNTpVoFv2A/exec";
 
+var survey = new Survey.Model(surveyJSON);
+survey.applyTheme(themeJSON);
+
 survey.onComplete.add(function(sender) {
-  var data = sender.data;
   fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
     mode: "no-cors",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
+    body: JSON.stringify(sender.data)
   }).catch(function(err) {
     console.error("Submission error:", err);
   });
 });
 
-// Render the survey
-$("#surveyElement").Survey({ model: survey });
+survey.render(document.getElementById("surveyElement"));
 </script>
 </body>
 </html>
