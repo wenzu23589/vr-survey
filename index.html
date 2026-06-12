@@ -134,9 +134,10 @@
     }
 
     /*
-      Matrix layout:
-      Keep the statement column readable and keep the five response columns aligned.
-      This prevents the statement column from collapsing after a radio button is selected.
+      Stable 5-point matrix layout:
+      The colgroup inserted by JavaScript fixes the actual table column widths.
+      This prevents SurveyJS from recalculating/reflowing the table after the
+      last row radio button is selected.
     */
     .lf-overlay-sticky-matrix {
       max-width: 100%;
@@ -157,6 +158,7 @@
     .lf-overlay-sticky-matrix table th:first-child,
     .lf-overlay-sticky-matrix table td:first-child {
       width: 42% !important;
+      min-width: 42% !important;
       max-width: 42% !important;
       white-space: normal !important;
       overflow-wrap: break-word !important;
@@ -168,8 +170,8 @@
     .lf-overlay-sticky-matrix table th:not(:first-child),
     .lf-overlay-sticky-matrix table td:not(:first-child) {
       width: 11.6% !important;
+      min-width: 11.6% !important;
       max-width: 11.6% !important;
-      min-width: 0 !important;
       text-align: center !important;
       vertical-align: middle !important;
       padding-left: 2px !important;
@@ -204,12 +206,15 @@
       }
 
       .lf-overlay-sticky-matrix table {
+        width: 720px !important;
         min-width: 720px !important;
+        max-width: 720px !important;
       }
 
       .lf-overlay-sticky-matrix table th:first-child,
       .lf-overlay-sticky-matrix table td:first-child {
         width: 300px !important;
+        min-width: 300px !important;
         max-width: 300px !important;
         font-size: 13px !important;
       }
@@ -273,6 +278,19 @@
     });
 
 
+
+    function cleanText(value) {
+      return String(value || "")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function shortText(value, maxLength) {
+      const cleaned = cleanText(value);
+      if (cleaned.length <= maxLength) return cleaned;
+      return cleaned.slice(0, maxLength - 1).trim() + "…";
+    }
+
     function getSurveyQuestion(questionName) {
       for (const page of surveyJson.pages || []) {
         for (const element of page.elements || []) {
@@ -282,8 +300,27 @@
       return null;
     }
 
+    function getMatrixRowText(question, rowValue) {
+      const rows = question && question.rows ? question.rows : [];
+      const match = rows.find(function(row) {
+        if (typeof row === "object") return row.value === rowValue;
+        return row === rowValue;
+      });
+
+      if (!match) return rowValue;
+
+      if (typeof match === "object") {
+        return match.text || match.value || rowValue;
+      }
+
+      return match;
+    }
+
     function mapChoiceValueToLabel(question, value) {
       if (value === undefined || value === null) return "";
+
+      if (value === true) return "Yes";
+      if (value === false) return "No";
 
       const choices = question && question.choices ? question.choices : [];
       const match = choices.find(function(choice) {
@@ -318,12 +355,18 @@
       return match;
     }
 
+    function makeQuestionHeader(questionName, question) {
+      if (!question) return questionName;
+      return shortText(question.title || question.name || questionName, 120);
+    }
+
     function convertSurveyDataToLabels(data) {
       const output = {};
 
       Object.keys(data || {}).forEach(function(questionName) {
         const question = getSurveyQuestion(questionName);
         const value = data[questionName];
+        const questionHeader = makeQuestionHeader(questionName, question);
 
         if (!question) {
           output[questionName] = value;
@@ -331,30 +374,58 @@
         }
 
         if (question.type === "matrix" && value && typeof value === "object" && !Array.isArray(value)) {
-          const matrixOutput = {};
           Object.keys(value).forEach(function(rowKey) {
-            matrixOutput[rowKey] = mapMatrixValueToLabel(question, value[rowKey]);
+            const rowText = shortText(getMatrixRowText(question, rowKey), 90);
+            const header = questionHeader + " | " + rowText;
+            output[header] = mapMatrixValueToLabel(question, value[rowKey]);
           });
-          output[questionName] = matrixOutput;
           return;
         }
 
         if (Array.isArray(value)) {
-          output[questionName] = value.map(function(item) {
+          output[questionHeader] = value.map(function(item) {
             return mapChoiceValueToLabel(question, item);
           }).join("; ");
           return;
         }
 
-        if (question.choices) {
-          output[questionName] = mapChoiceValueToLabel(question, value);
+        if (question.choices || question.type === "boolean") {
+          output[questionHeader] = mapChoiceValueToLabel(question, value);
           return;
         }
 
-        output[questionName] = value;
+        output[questionHeader] = value;
       });
 
       return output;
+    }
+
+    function lockMatrixColumnWidths() {
+      document.querySelectorAll(".lf-overlay-sticky-matrix table").forEach(function(table) {
+        if (table.dataset.lfWidthsLocked === "true") return;
+
+        const colCount = 6; // statement + five Likert columns
+        let colgroup = table.querySelector("colgroup");
+        if (!colgroup) {
+          colgroup = document.createElement("colgroup");
+          table.insertBefore(colgroup, table.firstChild);
+        }
+
+        colgroup.innerHTML = "";
+
+        const statementCol = document.createElement("col");
+        statementCol.style.width = "42%";
+        colgroup.appendChild(statementCol);
+
+        for (let i = 0; i < 5; i++) {
+          const col = document.createElement("col");
+          col.style.width = "11.6%";
+          colgroup.appendChild(col);
+        }
+
+        table.style.tableLayout = "fixed";
+        table.dataset.lfWidthsLocked = "true";
+      });
     }
 
     function renderSurvey() {
@@ -374,22 +445,23 @@
         if (options.question && STICKY_MATRIX_QUESTIONS.includes(options.question.name)) {
           options.htmlElement.classList.add("lf-overlay-sticky-matrix");
           options.htmlElement.setAttribute("data-lf-question-name", options.question.name);
+          setTimeout(lockMatrixColumnWidths, 100);
         }
       });
 
       survey.onAfterRenderPage.add(function() {
         applyUploadedThemeVariables(surveyTheme);
-        setTimeout(buildStickyMatrixOverlays, 300);
+        setTimeout(function(){ lockMatrixColumnWidths(); buildStickyMatrixOverlays(); }, 300);
       });
 
       survey.onAfterRenderSurvey.add(function() {
         applyUploadedThemeVariables(surveyTheme);
-        setTimeout(buildStickyMatrixOverlays, 300);
+        setTimeout(function(){ lockMatrixColumnWidths(); buildStickyMatrixOverlays(); }, 300);
       });
 
       survey.onCurrentPageChanged.add(function() {
         applyUploadedThemeVariables(surveyTheme);
-        setTimeout(buildStickyMatrixOverlays, 350);
+        setTimeout(function(){ lockMatrixColumnWidths(); buildStickyMatrixOverlays(); }, 350);
       });
 
       survey.onComplete.add(function(sender) {
@@ -432,7 +504,7 @@
 
       survey.render(document.getElementById("surveyElement"));
       applyUploadedThemeVariables(surveyTheme);
-      setTimeout(buildStickyMatrixOverlays, 500);
+      setTimeout(function(){ lockMatrixColumnWidths(); buildStickyMatrixOverlays(); }, 500);
     }
 
     /*
@@ -573,7 +645,7 @@
 
       document.addEventListener("change", function(event) {
         if (event.target && event.target.matches("input[type='radio']")) {
-          setTimeout(updateStickyMatrixOverlays, 50);
+          setTimeout(function(){ lockMatrixColumnWidths(); updateStickyMatrixOverlays(); }, 50);
         }
       }, true);
     })();
