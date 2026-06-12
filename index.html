@@ -134,9 +134,9 @@
     }
 
     /*
-      Matrix layout for the VR questionnaire:
-      keep the native SurveyJS matrix stable. The overlay sticky header
-      does not modify the table after a radio button is selected.
+      Matrix layout:
+      Keep the statement column readable and keep the five response columns aligned.
+      This prevents the statement column from collapsing after a radio button is selected.
     */
     .lf-overlay-sticky-matrix {
       max-width: 100%;
@@ -156,17 +156,19 @@
 
     .lf-overlay-sticky-matrix table th:first-child,
     .lf-overlay-sticky-matrix table td:first-child {
-      width: 40% !important;
-      max-width: 40% !important;
+      width: 42% !important;
+      max-width: 42% !important;
       white-space: normal !important;
       overflow-wrap: break-word !important;
       word-break: normal !important;
+      padding-left: 12px !important;
+      padding-right: 12px !important;
     }
 
     .lf-overlay-sticky-matrix table th:not(:first-child),
     .lf-overlay-sticky-matrix table td:not(:first-child) {
-      width: 12% !important;
-      max-width: 12% !important;
+      width: 11.6% !important;
+      max-width: 11.6% !important;
       min-width: 0 !important;
       text-align: center !important;
       vertical-align: middle !important;
@@ -202,21 +204,21 @@
       }
 
       .lf-overlay-sticky-matrix table {
-        min-width: 650px !important;
+        min-width: 720px !important;
       }
 
       .lf-overlay-sticky-matrix table th:first-child,
       .lf-overlay-sticky-matrix table td:first-child {
-        width: 260px !important;
-        max-width: 260px !important;
+        width: 300px !important;
+        max-width: 300px !important;
         font-size: 13px !important;
       }
 
       .lf-overlay-sticky-matrix table th:not(:first-child),
       .lf-overlay-sticky-matrix table td:not(:first-child) {
-        width: 78px !important;
-        min-width: 78px !important;
-        max-width: 78px !important;
+        width: 84px !important;
+        min-width: 84px !important;
+        max-width: 84px !important;
         padding-left: 1px !important;
         padding-right: 1px !important;
       }
@@ -270,6 +272,91 @@
       console.error(event.error || event.message);
     });
 
+
+    function getSurveyQuestion(questionName) {
+      for (const page of surveyJson.pages || []) {
+        for (const element of page.elements || []) {
+          if (element.name === questionName) return element;
+        }
+      }
+      return null;
+    }
+
+    function mapChoiceValueToLabel(question, value) {
+      if (value === undefined || value === null) return "";
+
+      const choices = question && question.choices ? question.choices : [];
+      const match = choices.find(function(choice) {
+        if (typeof choice === "object") return choice.value === value;
+        return choice === value;
+      });
+
+      if (!match) return value;
+
+      if (typeof match === "object") {
+        return match.text || match.value || value;
+      }
+
+      return match;
+    }
+
+    function mapMatrixValueToLabel(question, value) {
+      if (value === undefined || value === null) return "";
+
+      const columns = question && question.columns ? question.columns : [];
+      const match = columns.find(function(column) {
+        if (typeof column === "object") return column.value === value;
+        return column === value;
+      });
+
+      if (!match) return value;
+
+      if (typeof match === "object") {
+        return match.text || match.value || value;
+      }
+
+      return match;
+    }
+
+    function convertSurveyDataToLabels(data) {
+      const output = {};
+
+      Object.keys(data || {}).forEach(function(questionName) {
+        const question = getSurveyQuestion(questionName);
+        const value = data[questionName];
+
+        if (!question) {
+          output[questionName] = value;
+          return;
+        }
+
+        if (question.type === "matrix" && value && typeof value === "object" && !Array.isArray(value)) {
+          const matrixOutput = {};
+          Object.keys(value).forEach(function(rowKey) {
+            matrixOutput[rowKey] = mapMatrixValueToLabel(question, value[rowKey]);
+          });
+          output[questionName] = matrixOutput;
+          return;
+        }
+
+        if (Array.isArray(value)) {
+          output[questionName] = value.map(function(item) {
+            return mapChoiceValueToLabel(question, item);
+          }).join("; ");
+          return;
+        }
+
+        if (question.choices) {
+          output[questionName] = mapChoiceValueToLabel(question, value);
+          return;
+        }
+
+        output[questionName] = value;
+      });
+
+      return output;
+    }
+
     function renderSurvey() {
       if (!window.Survey || !Survey.Model) {
         document.getElementById("surveyElement").innerHTML =
@@ -312,10 +399,15 @@
           status.textContent = "Submitting your response...";
         }
 
+        const labelledData = convertSurveyDataToLabels(sender.data);
+
         const payload = Object.assign({
           submittedAt: new Date().toISOString(),
-          surveyTitle: sender.title || document.title
-        }, sender.data);
+          surveyTitle: sender.title || document.title,
+          responses: labelledData
+        }, labelledData);
+
+        console.log("Submitting survey payload to Google Sheets:", payload);
 
         fetch(GOOGLE_SHEETS_WEB_APP_URL, {
           method: "POST",
