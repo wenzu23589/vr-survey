@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teachers' Perceptions of Virtual Reality in Maltese Language Teaching</title>
+  <link rel="stylesheet" href="https://unpkg.com/survey-core@1.12.28/defaultV2.min.css" />
+  <script src="https://unpkg.com/survey-core@1.12.28/survey.core.min.js"></script>
+  <script src="https://unpkg.com/survey-js-ui@1.12.28/survey-js-ui.min.js"></script>
+  <style>
+    body { margin: 0; padding: 0; background: #f3f3f3; }
+  </style>
+</head>
+<body>
+<div id="surveyElement"></div>
+
+<script>
+var themeJSON = {
+  "themeName": "default",
+  "colorPalette": "light",
+  "isPanelless": false,
+  "backgroundImage": "",
+  "backgroundImageFit": "cover",
+  "backgroundImageAttachment": "scroll",
+  "backgroundOpacity": 1,
+  "cssVariables": {
+    "--sjs-font-family": "Open Sans",
+    "--sjs-font-size": "16px",
+    "--sjs-corner-radius": "4px",
+    "--sjs-base-unit": "8px",
+    "--sjs-shadow-small": "0px 1px 2px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-shadow-inner": "inset 0px 1px 2px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-border-default": "rgba(0, 0, 0, 0.16)",
+    "--sjs-border-light": "rgba(0, 0, 0, 0.09)",
+    "--sjs-general-backcolor": "rgba(255, 255, 255, 1)",
+    "--sjs-general-backcolor-dark": "rgba(248, 248, 248, 1)",
+    "--sjs-general-backcolor-dim-light": "rgba(249, 249, 249, 1)",
+    "--sjs-general-backcolor-dim-dark": "rgba(243, 243, 243, 1)",
+    "--sjs-general-forecolor": "rgba(0, 0, 0, 0.91)",
+    "--sjs-general-forecolor-light": "rgba(0, 0, 0, 0.45)",
+    "--sjs-general-dim-forecolor": "rgba(0, 0, 0, 0.91)",
+    "--sjs-general-dim-forecolor-light": "rgba(0, 0, 0, 0.45)",
+    "--sjs-secondary-backcolor": "rgba(255, 152, 20, 1)",
+    "--sjs-secondary-backcolor-light": "rgba(255, 152, 20, 0.1)",
+    "--sjs-secondary-backcolor-semi-light": "rgba(255, 152, 20, 0.25)",
+    "--sjs-secondary-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-secondary-forecolor-light": "rgba(255, 255, 255, 0.25)",
+    "--sjs-shadow-small-reset": "0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-shadow-medium": "0px 2px 6px 0px rgba(0, 0, 0, 0.1)",
+    "--sjs-shadow-large": "0px 8px 16px 0px rgba(0, 0, 0, 0.1)",
+    "--sjs-shadow-inner-reset": "inset 0px 0px 0px 0px rgba(0, 0, 0, 0.15)",
+    "--sjs-border-inside": "rgba(0, 0, 0, 0.16)",
+    "--sjs-special-red-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-special-green": "rgba(25, 179, 148, 1)",
+    "--sjs-special-green-light": "rgba(25, 179, 148, 0.1)",
+    "--sjs-special-green-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-special-blue": "rgba(67, 127, 217, 1)",
+    "--sjs-special-blue-light": "rgba(67, 127, 217, 0.1)",
+    "--sjs-special-blue-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-special-yellow": "rgba(255, 152, 20, 1)",
+    "--sjs-special-yellow-light": "rgba(255, 152, 20, 0.1)",
+    "--sjs-special-yellow-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-general-backcolor-dim": "rgba(243, 243, 243, 1)",
+    "--sjs-primary-backcolor": "rgba(25, 179, 148, 1)",
+    "--sjs-primary-backcolor-dark": "rgba(20, 164, 139, 1)",
+    "--sjs-primary-backcolor-light": "rgba(25, 179, 148, 0.1)",
+    "--sjs-primary-forecolor": "rgba(255, 255, 255, 1)",
+    "--sjs-primary-forecolor-light": "rgba(255, 255, 255, 0.25)",
+    "--sjs-special-red": "rgba(229, 10, 62, 1)",
+    "--sjs-special-red-light": "rgba(229, 10, 62, 0.1)"
+  },
+  "header": {
+    "height": 0,
+    "mobileHeight": 0,
+    "inheritWidthFrom": "survey",
+    "textAreaWidth": 0,
+    "backgroundImageFit": "cover",
+    "backgroundImageOpacity": 100,
+    "overlapEnabled": false,
+    "logoPositionX": "left",
+    "logoPositionY": "top",
+    "titlePositionX": "left",
+    "titlePositionY": "bottom",
+    "descriptionPositionX": "left",
+    "descriptionPositionY": "bottom"
+  },
+  "headerView": "advanced"
+};
+
+var surveyJSON = {
+  "title": "Teachers' Perceptions of Virtual Reality in Maltese Language Teaching",
+  "completedHtml": "<h3>Thank you for taking the time to complete the questionnaire.</h3><p>Your response has been recorded.</p>",
+  "pages": [
+    {
+      "name": "page0",
+      "title": "Information",
+      "elements": [
+        {
+          "type": "html",
+          "name": "question19",
+          "html": "<style>.info-letter{max-width:760px;margin:0 auto;padding:3rem 3.5rem;background:#ffffff;border:1px solid #ddd6c8;box-shadow:0 8px 35px rgba(0,0,0,0.08);color:#1c1a17;font-family:Georgia,'Times New Roman',serif;font-size:17px;line-height:1.75}.info-letter .letterhead{display:flex;justify-content:space-between;gap:2rem;margin-bottom:2rem;padding-bottom:1.25rem;border-bottom:1px solid #b5a48a}.info-letter .letterhead-left h1{margin:0;color:#3b4a6b;font-size:1.1rem;letter-spacing:.12em;text-transform:uppercase}.info-letter .letterhead-left p,.info-letter .letterhead-right p{margin:.15rem 0;color:#6b6355;font-size:.85rem}.info-letter .letterhead-right{text-align:right}.info-letter .subject-block{margin-bottom:1.75rem;padding:.8rem 1rem;background:#f4f0ea;border-left:4px solid #3b4a6b;font-size:.95rem}.info-letter .subject-block strong{color:#3b4a6b}.info-letter .salutation{margin-bottom:1.2rem;font-style:italic}.info-letter p{margin-bottom:1.2rem;text-align:justify}.info-letter a{color:#3b4a6b;text-decoration:none;border-bottom:1px dotted #3b4a6b}.info-letter .notice-box{margin:1.5rem 0;padding:1rem 1.25rem;background:#faf7f3;border:1px solid #b5a48a;color:#6b6355;font-size:.95rem}.info-letter .notice-box::before{content:'Data Protection Notice';display:block;margin-bottom:.5rem;color:#7a2e2e;font-size:.78rem;font-weight:bold;letter-spacing:.1em;text-transform:uppercase}.info-letter .consent-para{margin:1.5rem 0;padding:.9rem 0;border-top:1px solid #b5a48a;border-bottom:1px solid #b5a48a;color:#6b6355;font-style:italic}.info-letter .signature-name{font-size:1.05rem;font-weight:bold}.info-letter .signature-title,.info-letter .signature-contact{margin-top:.25rem;color:#6b6355;font-size:.9rem}.info-letter .footer-rule{margin-top:2.5rem;padding-top:.8rem;border-top:1px solid #b5a48a;color:#6b6355;font-size:.75rem;text-align:center;letter-spacing:.05em}</style><div class='info-letter'><div class='letterhead'><div class='letterhead-left'><h1>University of Malta</h1><p>Information and Consent Letter</p></div><div class='letterhead-right'><p>Dr. Ing. Lawrence Farrugia Caruana &amp; Dr. Jacqueline Żammit</p><p>Senior Lecturers, Faculty of Education</p><p>University of Malta</p><p><a href='mailto:lawrence.farrugia@um.edu.mt'>lawrence.farrugia@um.edu.mt</a></p><p><a href='mailto:jacqueline.zammit@um.edu.mt'>jacqueline.zammit@um.edu.mt</a></p></div></div><div class='subject-block'><strong>Re:</strong> Invitation to Participate in a Research Study on <em>Teachers&#8217; Perceptions of Virtual Reality in Maltese Language Teaching</em></div><p class='salutation'>Dear Sir/Madam,</p><p>My name is <strong>Dr. Ing. Lawrence Farrugia Caruana</strong> and I am conducting this research together with <strong>Dr. Jacqueline Żammit</strong>. We are presently carrying out a study investigating <em>in-service Maltese language teachers&#8217; perceptions of virtual reality (VR) technology</em> as a tool for language teaching. Specifically, the study examines teachers&#8217; beliefs regarding the value of VR for student learning, their expectations of success in using it, and the perceived costs and practical challenges associated with its implementation in the Maltese language classroom.</p><p>Should you agree to participate, you will be invited to take part in a three-stage process. First, you will be asked to complete a brief background questionnaire. You will then be invited to experience a 360-degree interactive Maltese language VR tool individually, for approximately 15&#8211;20 minutes. Immediately following this experience, you will be asked to complete a post-session questionnaire.</p><p>Participation in this study is entirely voluntary. You are free to withdraw at any time without any negative repercussions.</p><p>All data will be collected via a secure online platform and stored in anonymised form. No personally identifiable information is collected or stored at any point. Anonymised data may be used in publications or future research.</p><div class='notice-box'>As a participant, you have the right under the <strong>General Data Protection Regulation (GDPR)</strong> and national legislation to access, rectify and, where applicable, ask for the data concerning you to be erased.</div><p class='consent-para'>By completing the questionnaire, you are providing consent to participate in the study. You are also confirming that you are 18 years or over. All data collected is anonymous and will be treated confidentially.</p><p>Thank you for your time. Should you have any questions, please contact us at <a href='mailto:lawrence.farrugia@um.edu.mt'>lawrence.farrugia@um.edu.mt</a> or <a href='mailto:jacqueline.zammit@um.edu.mt'>jacqueline.zammit@um.edu.mt</a>.</p><div style='margin-top:2rem'><div class='signature-name'>Dr. Ing. Lawrence Farrugia Caruana</div><div class='signature-title'>Senior Lecturer, Faculty of Education, University of Malta</div></div><div style='margin-top:1rem'><div class='signature-name'>Dr. Jacqueline Żammit</div><div class='signature-title'>Senior Lecturer, Department of Languages and Humanities Education, Faculty of Education, University of Malta</div></div><p class='footer-rule'>This letter is issued for research purposes only &mdash; University of Malta. For research ethics queries please contact research-ethics.educ@um.edu.mt</p></div>"
+        },
+        {
+          "type": "boolean",
+          "name": "question20",
+          "title": "I confirm that I am aged 18 or over, have read the information above, and voluntarily agree to participate in this study."
+        }
+      ]
+    },
+    {
+      "name": "page1",
+      "title": "Section 1: Background Information",
+      "description": "Please answer the following questions about your teaching background and prior experience with technology.",
+      "elements": [
+        {
+          "type": "dropdown",
+          "name": "question1",
+          "title": "Gender",
+          "description": "Please tick one box",
+          "isRequired": true,
+          "choices": [
+            {"value": "Item 1", "text": "Female"},
+            {"value": "Item 2", "text": "Male"},
+            {"value": "Item 3", "text": "Non-Binary"},
+            {"value": "Item 4", "text": "Prefer not say"}
+          ],
+          "showOtherItem": true
+        },
+        {
+          "type": "text",
+          "name": "question10",
+          "title": "Age",
+          "description": "Please input a number",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "text",
+          "name": "question2",
+          "title": "Years of experience teaching Maltese",
+          "description": "Please input a number",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "checkbox",
+          "name": "question3",
+          "title": "School level at which you teach Maltese",
+          "description": "Please tick all that apply",
+          "isRequired": true,
+          "choices": [
+            {"value": "Item 1", "text": "Primary"},
+            {"value": "Item 2", "text": "Secondary"},
+            {"value": "Item 3", "text": "Post-Secondary"}
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question4",
+          "title": "How would you describe your general teaching approach?",
+          "description": "Please tick one box.",
+          "isRequired": true,
+          "choices": [
+            {"value": "Item 1", "text": "Mainly teacher-centred"},
+            {"value": "Item 2", "text": "A balance of both"},
+            {"value": "Item 3", "text": "Mainly student-centred"}
+          ]
+        },
+        {
+          "type": "text",
+          "name": "question5",
+          "title": "What is the average class size that you teach?",
+          "description": "Please provide a whole number",
+          "isRequired": true,
+          "inputType": "number"
+        },
+        {
+          "type": "rating",
+          "name": "question7",
+          "title": "How would you rate teachers' access to VR in your school?",
+          "description": "Please provide a rating from 1 (Very limited) to 5 (Excellent)",
+          "isRequired": true,
+          "minRateDescription": "Very Limited",
+          "maxRateDescription": "Excellent"
+        },
+        {
+          "type": "rating",
+          "name": "question6",
+          "title": "How would you rate students' access to VR in your school?",
+          "description": "Please provide a rating from 1 (Very limited) to 5 (Excellent)",
+          "isRequired": true,
+          "minRateDescription": "Very Limited",
+          "maxRateDescription": "Excellent"
+        },
+        {
+          "type": "radiogroup",
+          "name": "question11",
+          "title": "How would you describe your experience with VR technology in general, outside of today's session?",
+          "description": "This includes any context e.g. personal use, entertainment, work, training etc.",
+          "isRequired": true,
+          "choices": [
+            {"value": "Item 1", "text": "No experience at all"},
+            {"value": "Item 2", "text": "Used it once or twice"},
+            {"value": "Item 3", "text": "Used it a few times"},
+            {"value": "Item 4", "text": "Used it occasionally"},
+            {"value": "Item 5", "text": "Used it regularly"}
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question9",
+          "title": "How would you describe your experience using VR technology specifically in an educational or teaching context, prior to today's session?",
+          "choices": [
+            {"value": "Item 1", "text": "No experience at all"},
+            {"value": "Item 2", "text": "Used it once or twice"},
+            {"value": "Item 3", "text": "Used it a few times"},
+            {"value": "Item 4", "text": "Used it occasionally"},
+            {"value": "Item 5", "text": "Used it regularly"}
+          ]
+        },
+        {
+          "type": "matrix",
+          "name": "question12",
+          "title": "Availability of IT support in your school",
+          "description": "Please indicate your level of agreement with the following statement.",
+          "isRequired": true,
+          "columns": [
+            {"value": "Column 1", "text": "Strongly Disagree"},
+            {"value": "Column 2", "text": "Disagree"},
+            {"value": "Column 3", "text": "Neither Agree nor Disagree"},
+            {"value": "Column 4", "text": "Agree"},
+            {"value": "Column 5", "text": "Strongly Agree"}
+          ],
+          "rows": [{"value": "Row 1", "text": "IT support is available to me when I need it in my school"}]
+        },
+        {
+          "type": "matrix",
+          "name": "question13",
+          "title": "Prior experience with educational technology",
+          "description": "Please indicate your level of agreement with the following statement.",
+          "isRequired": true,
+          "columns": [
+            {"value": "Column 1", "text": "Strongly Disagree"},
+            {"value": "Column 2", "text": "Disagree"},
+            {"value": "Column 3", "text": "Neither Agree nor Disagree"},
+            {"value": "Column 4", "text": "Agree"},
+            {"value": "Column 5", "text": "Strongly Agree"}
+          ],
+          "rows": [{"value": "Row 1", "text": "I am confident using educational technology in my teaching"}]
+        }
+      ]
+    },
+    {
+      "name": "page2",
+      "title": "Section 2: Beliefs about VR in Maltese Language Teaching",
+      "elements": [
+        {
+          "type": "matrix",
+          "name": "question14",
+          "title": "Beliefs about VR in Maltese Language Teaching",
+          "description": "The following statements refer specifically to the use of VR for teaching Maltese language. Having just experienced VR, please indicate the level of agreement with each statement.\n\nScale: 1 = Strongly Disagree; 2 = Disagree; 3 = Neither Agree nor Disagree; 4 = Agree; 5 = Strongly Agree",
+          "isRequired": true,
+          "columns": [
+            {"value": "Column 1", "text": "[1] Strongly Disagree"},
+            {"value": "Column 2", "text": "[2] Disagree"},
+            {"value": "Column 3", "text": "[3] Neither agree nor disagree"},
+            {"value": "Column 4", "text": "[4] Agree"},
+            {"value": "Column 5", "text": "[5] Strongly Agree"}
+          ],
+          "rows": [
+            {"value": "Row 1", "text": "Improves student academic achievement (e.g., grades)."},
+            {"value": "Row 2", "text": "Does not make classroom management more difficult."},
+            {"value": "Row 3", "text": "Promotes the development of communication skills (e.g., writing skills, presentation skills)."},
+            {"value": "Row 4", "text": "Does not require extra resources, time and effort."},
+            {"value": "Row 5", "text": "Is successful only if there is adequate teacher training in the use of VR technology."},
+            {"value": "Row 6", "text": "Is successful only if the VR equipment is regularly maintained by IT personnel."},
+            {"value": "Row 7", "text": "Is an effective tool for students of all abilities."},
+            {"value": "Row 8", "text": "Is effective if teachers participate in the selection and implementation of VR technology."},
+            {"value": "Row 9", "text": "Helps accommodate individual attributes of students."},
+            {"value": "Row 10", "text": "Motivates students to get more involved in learning activities."},
+            {"value": "Row 11", "text": "Requires software training, which does not take too much time."},
+            {"value": "Row 12", "text": "Promotes the development of student interpersonal skills."},
+            {"value": "Row 13", "text": "Is effective only if extensive technical resources are available."},
+            {"value": "Row 14", "text": "Does not require extra time to plan learning activities."},
+            {"value": "Row 15", "text": "Improves student learning of critical concepts and ideas."},
+            {"value": "Row 16", "text": "Is practical due to the availability of subject-specific software."}
+          ],
+          "rowOrder": "random"
+        }
+      ]
+    },
+    {
+      "name": "page3",
+      "title": "Section 3: VR Technology Integration Stage",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question15",
+          "title": "Please read each stage description carefully and tick the ONE stage that best describes your current level of VR technology integration in your teaching.",
+          "isRequired": true,
+          "choices": [
+            {"value": "Item 1", "text": "I am aware that VR technology exists but have not used it in my teaching and have no interest in doing so."},
+            {"value": "Item 2", "text": "I am learning about VR technology and beginning to explore its potential for teaching."},
+            {"value": "Item 3", "text": "I understand how VR technology works and have a basic idea of how it could be used in teaching."},
+            {"value": "Item 4", "text": "I am familiar with VR technology and have used it occasionally in a teaching context."},
+            {"value": "Item 5", "text": "I regularly adapt and use VR technology as part of my teaching practice."},
+            {"value": "Item 6", "text": "I am confident integrating VR into the curriculum and can modify and develop VR-based instructional activities independently."}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "page4",
+      "title": "Section 4: VR for Maltese Language Teaching",
+      "elements": [
+        {
+          "type": "matrix",
+          "name": "question16",
+          "title": "VR for the Maltese Language context",
+          "description": "The following statements address dimensions specific to teaching Maltese as a minority national language. Please indicate your level of agreement with each statement.\n\nScale: 1 = Strongly Disagree  2 = Disagree  3 = Neither Agree nor Disagree  4 = Agree  5 = Strongly Agree",
+          "isRequired": true,
+          "columns": [
+            {"value": "Column 1", "text": "[1] Strongly Disagree"},
+            {"value": "Column 2", "text": "[2] Disagree"},
+            {"value": "Column 3", "text": "[3] Neither Agree nor Disagree"},
+            {"value": "Column 4", "text": "[4] Agree"},
+            {"value": "Column 5", "text": "[5] Strongly Agree"}
+          ],
+          "rows": [
+            {"value": "Row 1", "text": "A VR experience in Maltese could help motivate students who find the language less engaging than English."},
+            {"value": "Row 2", "text": "Immersive VR environments in Maltese could strengthen students' cultural connection to the Maltese language and identity."},
+            {"value": "Row 3", "text": "The use of VR for Maltese language teaching aligns with current national curriculum goals."},
+            {"value": "Row 4", "text": "There is sufficient Maltese-language content available to make VR a sustainable teaching tool."},
+            {"value": "Row 5", "text": "VR could support Maltese language learning for students from mixed-language or English-dominant households."}
+          ]
+        }
+      ]
+    }
+  ],
+  "triggers": [
+    {"type": "complete", "expression": "{question20} = false"}
+  ],
+  "cookieName": "1",
+  "showTitle": false,
+  "showProgressBar": true,
+  "progressBarShowPageTitles": true,
+  "firstPageIsStartPage": true
+};
+
+var GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbytaudwFL-nqVM4yQtyam5sqqKbjGMwGq8nDBhwaXl8TxzCwRTukBouozkHoNTpVoFv2A/exec";
+
+var survey = new Survey.Model(surveyJSON);
+survey.applyTheme(themeJSON);
+
+survey.onComplete.add(function(sender) {
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(sender.data)
+  }).catch(function(err) {
+    console.error("Submission error:", err);
+  });
+});
+
+survey.render(document.getElementById("surveyElement"));
+</script>
+</body>
+</html>
