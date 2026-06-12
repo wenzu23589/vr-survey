@@ -135,8 +135,8 @@
 
     /*
       Matrix layout for the VR questionnaire:
-      keep all 5 radio-button columns visible while preserving the native SurveyJS header.
-      The sticky solution below overlays only when the native header scrolls out of view.
+      keep the native SurveyJS matrix stable. The overlay sticky header
+      does not modify the table after a radio button is selected.
     */
     .lf-overlay-sticky-matrix {
       max-width: 100%;
@@ -145,14 +145,19 @@
 
     .lf-overlay-sticky-matrix table {
       width: 100% !important;
-      min-width: 0 !important;
       table-layout: fixed !important;
+      border-collapse: collapse;
+    }
+
+    .lf-overlay-sticky-matrix table th,
+    .lf-overlay-sticky-matrix table td {
+      box-sizing: border-box !important;
     }
 
     .lf-overlay-sticky-matrix table th:first-child,
     .lf-overlay-sticky-matrix table td:first-child {
-      width: clamp(210px, 38vw, 460px) !important;
-      max-width: clamp(210px, 38vw, 460px) !important;
+      width: 40% !important;
+      max-width: 40% !important;
       white-space: normal !important;
       overflow-wrap: break-word !important;
       word-break: normal !important;
@@ -160,13 +165,13 @@
 
     .lf-overlay-sticky-matrix table th:not(:first-child),
     .lf-overlay-sticky-matrix table td:not(:first-child) {
-      width: calc((100% - clamp(210px, 38vw, 460px)) / 5) !important;
+      width: 12% !important;
+      max-width: 12% !important;
       min-width: 0 !important;
-      max-width: none !important;
-      padding-left: 3px !important;
-      padding-right: 3px !important;
       text-align: center !important;
-      box-sizing: border-box !important;
+      vertical-align: middle !important;
+      padding-left: 2px !important;
+      padding-right: 2px !important;
     }
 
     .lf-overlay-sticky-matrix table thead th {
@@ -174,11 +179,6 @@
       overflow-wrap: break-word !important;
       line-height: 1.15 !important;
       font-size: clamp(11px, 1.05vw, 13px) !important;
-    }
-
-    .lf-overlay-sticky-matrix table td,
-    .lf-overlay-sticky-matrix table th {
-      box-sizing: border-box !important;
     }
 
     .vr-sticky-matrix-header {
@@ -207,15 +207,16 @@
 
       .lf-overlay-sticky-matrix table th:first-child,
       .lf-overlay-sticky-matrix table td:first-child {
-        width: 210px !important;
-        max-width: 210px !important;
+        width: 260px !important;
+        max-width: 260px !important;
         font-size: 13px !important;
       }
 
       .lf-overlay-sticky-matrix table th:not(:first-child),
       .lf-overlay-sticky-matrix table td:not(:first-child) {
-        width: 88px !important;
-        min-width: 88px !important;
+        width: 78px !important;
+        min-width: 78px !important;
+        max-width: 78px !important;
         padding-left: 1px !important;
         padding-right: 1px !important;
       }
@@ -225,6 +226,7 @@
         line-height: 1.05 !important;
       }
     }
+
   </style>
 </head>
 <body>
@@ -310,11 +312,10 @@
           status.textContent = "Submitting your response...";
         }
 
-        const payload = {
+        const payload = Object.assign({
           submittedAt: new Date().toISOString(),
-          surveyTitle: sender.title || document.title,
-          responses: sender.data
-        };
+          surveyTitle: sender.title || document.title
+        }, sender.data);
 
         fetch(GOOGLE_SHEETS_WEB_APP_URL, {
           method: "POST",
@@ -477,6 +478,12 @@
       window.addEventListener("resize", function() {
         setTimeout(window.buildStickyMatrixOverlays, 150);
       });
+
+      document.addEventListener("change", function(event) {
+        if (event.target && event.target.matches("input[type='radio']")) {
+          setTimeout(updateStickyMatrixOverlays, 50);
+        }
+      }, true);
     })();
 
     if (document.readyState === "loading") {
